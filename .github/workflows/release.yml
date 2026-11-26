@@ -11,6 +11,9 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   RELEASE_DART_SDK: "3.9.0" # Release tool requires Dart >=3.8; pinned for reproducibility
 
+permissions:
+  contents: write
+
 jobs:
 
   test:
@@ -53,6 +56,8 @@ jobs:
         run: dart run grinder pkg-pub-deploy
 
   deploy-windows:
+        # Paused to limit GitHub Actions usage.
+        if: ${{ false }}
         name: Deploy Windows
         runs-on: windows-latest
         needs: release
@@ -84,6 +89,8 @@ jobs:
             run: dart run grinder pkg-chocolatey-deploy
 
   deploy-macos:
+      # Paused to limit GitHub Actions usage.
+      if: ${{ false }}
       name: Deploy macOS
       runs-on: macos-latest
       needs: release
@@ -168,3 +175,4 @@ jobs:
           tags: leoafarias/fvm:${{ env.MODIFIED_TAG_NAME }}
           build-args: |
             FVM_VERSION=${{ env.MODIFIED_TAG_NAME }}
+

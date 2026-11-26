@@ -1,3 +1,34 @@
+## 4.3.2
+
+* fix: preserve live command input/output, exit status, and Ctrl+C cleanup when falling back to the system PATH without a project or global SDK selection (#1080)
+* chore: migrate FVM repository, release metadata fallback, and installer references to `btwld/fvm` (#1078)
+
+## 4.3.1
+
+* fix: wait for proxied Flutter commands to finish cleanup after Ctrl+C before FVM exits with status 130, preventing terminals from being left in raw mode (#1054)
+* fix: support both `pub_updater` 0.4 and 0.5 in dependency resolution while retaining Dart 3.6 compatibility (#1022)
+
+## 4.3.0
+
+* feat: add `fvm cleanup` to preview unused cached SDKs and exact same-line stable patch upgrades, and to remove unused versions with `--remove-unused`. Recommended upgrade targets stay cached until a project or global pin moves; `fvm list` Unused now points here
+* feat: add `fvm api cleanup` with `upgrades`, `unused`, and `removable`. `unused` matches `fvm list` Unused and `fvm api list` `unreferencedVersions`; `removable` is what `--remove-unused` would delete
+* fix: explain when `fvm list` has no local project version to mark
+
+## 4.2.0
+
+* feat: add a `Projects` column to `fvm list` that shows how many known projects pin each cached SDK. Versions that no known project pins and that are not selected globally are labeled `Unused`. FVM records projects after `fvm use` or `fvm install` and reads their current `.fvmrc` values when listing
+* feat: expose the project roots used for SDK classification and the resulting unused versions through `fvm api list` as `projects` and `unreferencedVersions`
+* fix: correctly match forked channel pins such as `myfork/3.24.0@beta` to the installed `myfork/3.24.0` SDK in the `Local` and `Projects` columns
+
+## 4.1.5
+
+* perf: skip git-cache maintenance when running Flutter or Dart through an already-installed SDK (#1066)
+
+## 4.1.4
+
+* fix: stop git-cache maintenance from running destructive git commands against repositories FVM does not own (#1060)
+* Behavior change: FVM now clears repository-scoped git environment variables (`GIT_DIR`, `GIT_WORK_TREE`, `GIT_INDEX_FILE`, and the rest of the `git rev-parse --local-env-vars` set) when it runs `git`, `flutter`, or `dart`. Tools launched through FVM from inside a git hook, such as `fvm dart run` in a pre-commit hook, no longer see the hook's repository variables and will read the real index instead of the hook's staged index. Transport and auth variables like `GIT_SSH_COMMAND` and `GIT_ASKPASS` are preserved. (#1060)
+
 ## 4.1.2
 
 * fix: stop rebuilding the git cache on every command when macOS leaves `.DS_Store` files in it (#1043)
@@ -139,8 +170,8 @@
 
 ## 3.0.12
 
-* Adds skipping version mismatch handling when using force or running with a custom fvm version. [#653](https://github.com/leoafarias/fvm/issues/653)
-* Fixes parsing error of vscode settings when there are commas [#656](https://github.com/leoafarias/fvm/issues/656)
+* Adds skipping version mismatch handling when using force or running with a custom fvm version. [#653](https://github.com/btwld/fvm/issues/653)
+* Fixes parsing error of vscode settings when there are commas [#656](https://github.com/btwld/fvm/issues/656)
 * Sets global as first default if Dart SDK is not found in the project.
 
 ## 3.0.11
@@ -149,7 +180,7 @@
 
 ## 3.0.10
 
-* Fixed issue when config is found in directory no pubspec.yaml. [#638](https://github.com/leoafarias/fvm/issues/638)
+* Fixed issue when config is found in directory no pubspec.yaml. [#638](https://github.com/btwld/fvm/issues/638)
 
 ## 3.0.9
 
@@ -157,8 +188,8 @@
 
 ## 3.0.8
 
-* Implemented better validation checks for flavors [#639](https://github.com/leoafarias/fvm/issues/639)
-* Added flag to unlink global version `fvm global --unlink` [#619](https://github.com/leoafarias/fvm/issues/619)
+* Implemented better validation checks for flavors [#639](https://github.com/btwld/fvm/issues/639)
+* Added flag to unlink global version `fvm global --unlink` [#619](https://github.com/btwld/fvm/issues/619)
 
 ## 3.0.7
 
@@ -171,13 +202,13 @@
 
 ## 3.0.5
 
-* Added fallback when cannot validate Flutter SDK version using git tags. [#627](https://github.com/leoafarias/fvm/issues/627)
+* Added fallback when cannot validate Flutter SDK version using git tags. [#627](https://github.com/btwld/fvm/issues/627)
 
 ## 3.0.4
 
 * VsCode settings now supports jsonc (comments, trailing comma)
 * Change flutter project check to only check for pubspec.yaml
-* `fvm install`  command not creating sdk reference [#618](https://github.com/leoafarias/fvm/issues/618)
+* `fvm install`  command not creating sdk reference [#618](https://github.com/btwld/fvm/issues/618)
 
 ## 3.0.3
 
@@ -260,10 +291,10 @@
 
 ## 2.2.5 - 2021-12-09
 
-* Clean `dart` command output `stdout` [Issue #361](https://github.com/leoafarias/fvm/issues/361).
-* Better experience when running `dart pub cache repair` [Issue #352](https://github.com/leoafarias/fvm/issues/352).
-* Dart proxy points to the correct path when version is older than 1.20.0 [Issue #348](https://github.com/leoafarias/fvm/issues/348).
-* Flavors sequence of command causes `null` check exception [Issue #358](https://github.com/leoafarias/fvm/issues/358).
+* Clean `dart` command output `stdout` [Issue #361](https://github.com/btwld/fvm/issues/361).
+* Better experience when running `dart pub cache repair` [Issue #352](https://github.com/btwld/fvm/issues/352).
+* Dart proxy points to the correct path when version is older than 1.20.0 [Issue #348](https://github.com/btwld/fvm/issues/348).
+* Flavors sequence of command causes `null` check exception [Issue #358](https://github.com/btwld/fvm/issues/358).
 
 ## 2.2.4 - 2021-11-09
 
@@ -305,16 +336,16 @@
 
 ## 2.0.5 - 2021-05-19
 
-* Fixed concurrent Flutter commands execution on monorepos [Issue #296](https://github.com/leoafarias/fvm/issues/296).
+* Fixed concurrent Flutter commands execution on monorepos [Issue #296](https://github.com/btwld/fvm/issues/296).
 * Added `cli_notify` to check for new version updates.
 
 ## 2.0.4 - 2021-05-06
 
-* FVM only outputs information about version running when using `--verbose` flag [\#288](https://github.com/leoafarias/fvm/issues/288).
+* FVM only outputs information about version running when using `--verbose` flag [\#288](https://github.com/btwld/fvm/issues/288).
 
 ## 2.0.3 - 2021-05-04
 
-* Fixed monorepo compatibility [Issue #285](https://github.com/leoafarias/fvm/issues/285).
+* Fixed monorepo compatibility [Issue #285](https://github.com/btwld/fvm/issues/285).
 
 ## 2.0.2 - 2021-05-04
 
@@ -322,7 +353,7 @@
 
 ## 2.0.1 - 2021-05-01
 
-* Fix issue when retrieving settings [Issue #281](https://github.com/leoafarias/fvm/issues/281).
+* Fix issue when retrieving settings [Issue #281](https://github.com/btwld/fvm/issues/281).
 
 ## 2.0.0 - 2021-05-01
 
@@ -339,18 +370,18 @@
 
 ## 1.3.8 - 2021-03-26
 
-* Fixed an issue on FVM install [Issue #242](https://github.com/leoafarias/fvm/issues/242).
-* Fixed an Auto linking issue [Issue #207](https://github.com/leoafarias/fvm/issues/207).
+* Fixed an issue on FVM install [Issue #242](https://github.com/btwld/fvm/issues/242).
+* Fixed an Auto linking issue [Issue #207](https://github.com/btwld/fvm/issues/207).
 
 ## 1.3.7 - 2020-12-18
 
-* Fixed an issue for unwanted delay appearing after running `fvm use` command [\#195](https://github.com/leoafarias/fvm/issues/195).
+* Fixed an issue for unwanted delay appearing after running `fvm use` command [\#195](https://github.com/btwld/fvm/issues/195).
 
 ## 1.3.6 - 2020-10-29
 
 * Improvement: Added `PATH` env on Flutter processes for better third-party tooling support.
 * Fix: Updated Grinder dependencies.
-* Fix: Better ancestor lookup logic for monorepo setups. [Issue #180](https://github.com/leoafarias/fvm/issues/180).
+* Fix: Better ancestor lookup logic for monorepo setups. [Issue #180](https://github.com/btwld/fvm/issues/180).
 
 ## 1.3.5+1 - 2020-10-29
 
@@ -363,7 +394,7 @@
 
 ## 1.3.3 - 2020-10-14
 
-* Fixed an error when setting up on some platforms and tools [Issue #160](https://github.com/leoafarias/fvm/issues/160).
+* Fixed an error when setting up on some platforms and tools [Issue #160](https://github.com/btwld/fvm/issues/160).
 
 ## 1.3.2 - 2020-10-13
 
@@ -371,13 +402,13 @@
 
 ## 1.3.1 - 2020-10-11
 
-* Fix issue when running `install` command with pinned version [Issue #161](https://github.com/leoafarias/fvm/issues/161).
+* Fix issue when running `install` command with pinned version [Issue #161](https://github.com/btwld/fvm/issues/161).
 
 ## 1.3.0 - 2020-07-16
 
 * Bug fixes and improvements.
-* Implemented ability to change `cachePath` on settings [Issue #101](https://github.com/leoafarias/fvm/issues/101).
-* Improved UX with `flutter run` command [Issue #124](https://github.com/leoafarias/fvm/issues/124).
+* Implemented ability to change `cachePath` on settings [Issue #101](https://github.com/btwld/fvm/issues/101).
+* Improved UX with `flutter run` command [Issue #124](https://github.com/btwld/fvm/issues/124).
 * Added a notice on Windows to run in developer or administrator mode.
 * Ability to set Flutter Git Repo URL (Advanced).
 
@@ -387,7 +418,7 @@
 
 ## 1.2.2 - 2020-08-19
 
-* Updated process\_run dependency [(Issue #113)](https://github.com/fluttertools/fvm/pull/113).
+* Updated process\_run dependency [(Issue #113)](https://github.com/btwld/fvm/pull/113).
 
 ## 1.2.0 - 2020-08-16
 
